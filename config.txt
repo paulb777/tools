@@ -99,7 +99,7 @@ SWIFT_CC = $(XCODE)/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/b
 	-c \
 	-target armv7-apple-ios7.0 \
 	-module-name $(MODULE_NAME) \
-	-sdk /Applications/Xcode6.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS8.0.sdk \
+	-sdk $(XCODE)/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS8.0.sdk \
 	-emit-ir \
 	-o $(OBJ)/$(TARGET_FILE) \
 	-primary-file $(SOURCE) \
