@@ -88,7 +88,7 @@ def build_objc_sources(args, config, sources):
 	return True
 
 
-def build_swift_sources(args, config, sources):
+def build_swift_sources(args, config, sources, module):
 	
 	if args.verbose > 0 and len(sources):
 		print "swift sources " + str(len(sources))
@@ -111,6 +111,7 @@ def build_swift_sources(args, config, sources):
 										  'SWIFT_SOURCES' : remain, \
 										  'TARGET' : ir_name, \
 										  'TARGET_FILE' : os.path.basename(ir_name), \
+										  'MODULE_NAME' : module, \
 										  'SOURCE' : s, \
 										  'SOURCE_FILE' : os.path.basename(s)})		
 		if False == execute(args, cc, 1):
@@ -330,6 +331,11 @@ def main():
 		config = dict(config.items() + local.items())
 
 	config['CWD'] = os.getcwd()
+	config['DCF_ROOT'] = os.environ.get('DCF_ROOT')
+
+	if config['DCF_ROOT'] == None:
+		print 'DCF_ROOT environment variable must be set'
+		return
 
 	# finally expand variables
 	config = expand_variables(args, config)
@@ -376,10 +382,12 @@ def main():
 			elif a.endswith(".c") or a.endswith(".cpp"):
 				c_sources.append(a)
 
+	module = os.getcwd().split(os.sep)[-1] 
+
 	if False == build_objc_sources(args, config, objc_sources):
 		return False
 
-	if False == build_swift_sources(args, config, swift_sources):
+	if False == build_swift_sources(args, config, swift_sources, module):
 		return False
 
 	if False == build_asm_sources(args, config, asm_sources):

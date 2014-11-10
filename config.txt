@@ -23,12 +23,6 @@
 # THE SOFTWARE.
 #****************************************************************************
 
-// TODO - make DCF_ROOT not be user specific
-DCF_ROOT=/Users/paulb/dev/dcf
-
-# module name
-MODULE_NAME = Test
-
 # path to xcode application/toolchain
 XCODE = /Applications/Xcode.app 
 
@@ -41,7 +35,7 @@ ANDROID_NDK = $(DCF_ROOT)/toolchain/macosx/android-ndk
 # includes to add to 
 OBJC_INCLUDES = -I$(CWD)/.
 SWIFT_INCLUDES = -Xcc -I$(CWD)/.
-SYSROOT = /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator.sdk
+SYSROOT = $(XCODE)/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS8.0.sdk
 
 # standard symbol defined
 DEFINES = \
@@ -62,7 +56,8 @@ INTRINSIC_SYMBOLS = \
 	SOURCE_FILE \
 	SWIFT_SOURCES \
 	OBJECTS \
-	CWD
+	CWD \
+	MODULE_NAME
 
 OBJ = $(CWD)/obj
 
@@ -99,11 +94,12 @@ SWIFT_CC = $(XCODE)/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/b
 	-c \
 	-target armv7-apple-ios7.0 \
 	-module-name $(MODULE_NAME) \
-	-sdk $(XCODE)/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS8.0.sdk \
+	-sdk $(SYSROOT) \
 	-emit-ir \
 	-o $(OBJ)/$(TARGET_FILE) \
 	-primary-file $(SOURCE) \
-	$(SWIFT_SOURCES)
+	$(SWIFT_SOURCES) \
+	-parse-as-library
 
 # options for compiling c -> LLVM-IR
 CC = $(XCODE)/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang \
