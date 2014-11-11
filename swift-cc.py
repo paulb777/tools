@@ -337,6 +337,18 @@ def main():
 		print 'DCF_ROOT environment variable must be set'
 		return
 
+	# path to xcode application/toolchain
+	config['XCODE'] = '/Applications/Xcode.app'
+	sdk_dir = config['XCODE'] + '/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/'
+
+	if os.path.exists(sdk_dir + 'iPhoneOS8.1.sdk'):
+		config['SYSROOT'] = sdk_dir + 'iPhoneOS8.1.sdk'
+	elif os.path.exists(sdk_dir + 'iPhoneOS8.0.sdk'):
+		config['SYSROOT'] = sdk_dir + 'iPhoneOS8.0.sdk'
+	else:
+		print 'Could not find sdk at ' + sdk_dir
+		return	
+
 	# finally expand variables
 	config = expand_variables(args, config)
 
